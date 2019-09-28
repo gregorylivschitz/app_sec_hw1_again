@@ -60,9 +60,9 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]){
 	ssize_t line_size;
 	line_size = getline(&line_buf, &line_buf_size, fp);
 	hashmap_t first_node_ptr = malloc(sizeof(hashmap_t));
-	node first_node = *new_node_ptr;
+	node first_node = *first_node_ptr;
 	line_buf[strcspn(line_buf, "\n")] = 0;
-	strcpy(new_node.word, line_buf);
+	strcpy(first_node.word, line_buf);
 	printf("putting word into hashtable %s\n", first_node.word);
 	int hash_code = hash_function(line_buf);
 	printf("the hashcode is %d\n", hash_code);
