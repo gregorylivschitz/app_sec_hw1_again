@@ -2,3 +2,4 @@ language: c
 compiler: gcc
 install: sudo apt-get install check
 language: c
+script: make && make test
