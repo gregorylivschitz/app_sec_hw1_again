@@ -1,4 +1,4 @@
 language: c
 compiler: gcc
-install: apt-get install check
+install: sudo apt-get install check
 language: c
