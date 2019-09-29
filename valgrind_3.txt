@@ -1,0 +1,36 @@
+==5778==
+==5778== FILE DESCRIPTORS: 3 open at exit.
+==5778== Open file descriptor 2: /dev/tty2
+==5778==    <inherited from parent>
+==5778==
+==5778== Open file descriptor 1: /dev/tty2
+==5778==    <inherited from parent>
+==5778==
+==5778== Open file descriptor 0: /dev/tty2
+==5778==    <inherited from parent>
+==5778==
+==5778==
+==5778== HEAP SUMMARY:
+==5778==     in use at exit: 6,895,456 bytes in 123,132 blocks
+==5778==   total heap usage: 123,138 allocs, 6 frees, 6,908,968 bytes allocated
+==5778==
+==5778== 120 bytes in 1 blocks are definitely lost in loss record 1 of 2
+==5778==    at 0x4C2DB8F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5778==    by 0x4EA89E7: getdelim (iogetdelim.c:62)
+==5778==    by 0x400C71: load_dictionary (in /mnt/c/Users/greg1/dev/app_sec_assignment1/spell_check)
+==5778==    by 0x400FAE: main (in /mnt/c/Users/greg1/dev/app_sec_assignment1/spell_check)
+==5778==
+==5778== 6,895,336 bytes in 123,131 blocks are still reachable in loss record 2 of 2
+==5778==    at 0x4C2FB55: calloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5778==    by 0x400C89: load_dictionary (in /mnt/c/Users/greg1/dev/app_sec_assignment1/spell_check)
+==5778==    by 0x400FAE: main (in /mnt/c/Users/greg1/dev/app_sec_assignment1/spell_check)
+==5778==
+==5778== LEAK SUMMARY:
+==5778==    definitely lost: 120 bytes in 1 blocks
+==5778==    indirectly lost: 0 bytes in 0 blocks
+==5778==      possibly lost: 0 bytes in 0 blocks
+==5778==    still reachable: 6,895,336 bytes in 123,131 blocks
+==5778==         suppressed: 0 bytes in 0 blocks
+==5778==
+==5778== For counts of detected and suppressed errors, rerun with: -v
+==5778== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 2 from 1)

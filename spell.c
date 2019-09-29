@@ -26,7 +26,6 @@ int check_words(FILE* fp, hashmap_t hashtable[], char* misspelled[])
 		{
 			bool is_word_spelled = check_word(pch, hashtable);
 			if (!(is_word_spelled)){
-				printf("Found misspelled word %s\n", pch);
 				misspelled[misspell_count] = pch;
 				misspell_count++;
 			}
@@ -35,7 +34,6 @@ int check_words(FILE* fp, hashmap_t hashtable[], char* misspelled[])
 		line_count++;
 		line_size = getline(&line_buf, &line_buf_size, fp);
 	}
-//	print_misspell(misspelled);
 	free(line_buf);
 	line_buf = NULL;
 	fclose(fp);
@@ -45,27 +43,25 @@ int check_words(FILE* fp, hashmap_t hashtable[], char* misspelled[])
 bool check_word(const char* word, hashmap_t hashtable[]){
 	int hash_code = hash_function(word);
 	hashmap_t word_node_ptr = hashtable[hash_code];
-	printf("the hashcode of word %s is %d\n", word, hash_code);
 	while(word_node_ptr != NULL)
 	{
 		if (strcmp(word_node_ptr->word, word) == 0){
-			printf("word found %s\n", word_node_ptr->word);
 			return true;
 		}
 		word_node_ptr = word_node_ptr->next;
 	}
-//	char * lower_word = strlwr_custom(word);
-//	int hash_code_lower = hash_function(lower_word);
-//	hashmap_t word_node_ptr_lower = hashtable[hash_code_lower];
-//	printf("the hashcode of lower word %s is %d\n", lower_word, hash_code_lower);
-//	while(word_node_ptr_lower != NULL)
-//	{
-//		if (strcmp(word_node_ptr_lower->word, lower_word) == 0){
-//			printf("word found lower case\n");
-//			return true;
-//		}
-//		word_node_ptr_lower = word_node_ptr_lower->next;
-//	}
+	char lower_word[LENGTH+1];
+	strcpy(lower_word, word);
+	str_custom(lower_word);
+	int hash_code_lower = hash_function(lower_word);
+	hashmap_t word_node_ptr_lower = hashtable[hash_code_lower];
+	while(word_node_ptr_lower != NULL)
+	{
+		if (strcmp(word_node_ptr_lower->word, lower_word) == 0){
+			return true;
+		}
+		word_node_ptr_lower = word_node_ptr_lower->next;
+	}
 	return false;
 }
 
@@ -93,26 +89,19 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]){
 		line_count++;
 		line_size = getline(&line_buf, &line_buf_size, fp);
 	}
+	fclose(fp);
 	return true;
 }
 
 
 void insert_node_at_end(hashmap_t new_node, hashmap_t head)
 {
-	hashmap_t temp = malloc(sizeof(hashmap_t));
-	if(new_node == NULL)
+	hashmap_t temp = head;;
+	while(temp->next != NULL)
 	{
-		printf("Unable to allocate memory.");
+		temp = temp->next;
 	}
-	else
-	{
-		temp = head;;
-		while(temp->next != NULL)
-		{
-			temp = temp->next;
-		}
-		temp->next = new_node;
-	}
+	temp->next = new_node;
 }
 
 
@@ -138,15 +127,11 @@ void print_hashtable_one_link(hashmap_t hashtable[], int hash){
 	}
 }
 
-////Took it from here: https://ftp.samba.org/pub/unpacked/lorikeet-heimdal/lib/roken/strlwr.c
-//strlwr_custom(char *str)
-//{
-//	printf("running tolower\n");
-//	char *s;
-//	for(s = str; *s; s++){
-//		printf("to_lower before %d", (int)*s);
-//		*s = tolower(*s);
-//		printf("to_lower after %d", (int)*s);
-//	}
-//	return str;
-//}
+
+void str_custom(char * temp) {
+	char *s = temp;
+	while (*s) {
+		*s = tolower((unsigned char) *s);
+		s++;
+	}
+}
