@@ -1,14 +1,14 @@
-#include <unistd.h>
 #include <stdio.h>
-#include <limits.h>
 #include <string.h>
+#include <ctype.h>
+#include <stdlib.h>
 #include "dictionary.h"
 
-#define DICTIONARY "/mnt/c/Users/greg1/dev/app_sec_assignment1/wordlist.txt"
+#define DICTIONARY "wordlist.txt"
 
-extern hashmap_t * hashtable[];
 int main(int argc, char *argv[])
 {
+	hashmap_t hashtable[HASH_SIZE];
 	bool success = load_dictionary(DICTIONARY, hashtable);
 	if (success){
 		FILE *fp = fopen(argv[1], "r");
@@ -16,6 +16,10 @@ int main(int argc, char *argv[])
 		printf("Checking misspelled words");
 		int misspelled_words = check_words(fp, hashtable, misspell);
 		printf("misspelled words %d\n", misspelled_words);
+		for (int i=0; i< misspelled_words; i++){
+			char* my_word = misspell[i];
+			free(my_word);
+		}
 	}
 
 	return 0;

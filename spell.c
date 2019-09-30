@@ -6,7 +6,7 @@
 
 
 bool is_number(const char* word);
-char * strip_punc(const char * pch);
+char * strip_punc(char * pch);
 void insert_node_at_end(char * word, hashmap_t head);
 void str_custom(char * temp);
 void deallocate_hashtable(hashmap_t hashtable[]);
@@ -21,7 +21,6 @@ int check_words(FILE* fp, hashmap_t hashtable[], char* misspelled[])
 	int line_count = 0;
 	ssize_t line_size;
 	int misspell_count = 0;
-	bool max_misspell = false;
 	// The problem with this is I think we can get oom by big files?
 	line_size = getline(&line_buf, &line_buf_size, fp);
 	while (line_size >= 0 && misspell_count < MAX_MISSPELLED)
@@ -196,7 +195,7 @@ void deallocate_hashtable(hashmap_t hashtable[]){
 }
 
 bool is_number(const char* word){
-	char *s = word;
+	const char *s = word;
 	while (*s) {
 		if (isdigit(*s) == 0){
 			return false;
@@ -207,7 +206,7 @@ bool is_number(const char* word){
 }
 
 
-char * strip_punc(const char * pch){
+char * strip_punc(char * pch){
 	char *s = pch + strlen(pch) - 1;
 	while (ispunct(*s)) {
 		*s = '\0';
