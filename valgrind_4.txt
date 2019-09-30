@@ -1,0 +1,28 @@
+==6638== Memcheck, a memory error detector
+==6638== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==6638== Using Valgrind-3.11.0 and LibVEX; rerun with -h for copyright info
+==6638== Command: ./spell_check tale_of.txt
+==6638==
+==6638== error calling PR_SET_PTRACER, vgdb might block
+The argument supplied is tale_of.txt
+misspelled words 1000
+==6638==
+==6638== FILE DESCRIPTORS: 3 open at exit.
+==6638== Open file descriptor 2: /dev/tty2
+==6638==    <inherited from parent>
+==6638==
+==6638== Open file descriptor 1: /dev/tty2
+==6638==    <inherited from parent>
+==6638==
+==6638== Open file descriptor 0: /dev/tty2
+==6638==    <inherited from parent>
+==6638==
+==6638==
+==6638== HEAP SUMMARY:
+==6638==     in use at exit: 0 bytes in 0 blocks
+==6638==   total heap usage: 123,138 allocs, 123,138 frees, 6,908,968 bytes allocated
+==6638==
+==6638== All heap blocks were freed -- no leaks are possible
+==6638==
+==6638== For counts of detected and suppressed errors, rerun with: -v
+==6638== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 2 from 1)
