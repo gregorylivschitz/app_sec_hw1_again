@@ -29,10 +29,12 @@ START_TEST(test_check_word_normal)
     const char* punctuation_word_2 = "pl.ace";
     char * int_as_char = "155";
     char * quoted_word = "\"Justice\"";
+	char * overflow_char = "“in";
     ck_assert(check_word(correct_word, hashtable));
     ck_assert(!check_word(punctuation_word_2, hashtable));
     ck_assert(!check_word(quoted_word, hashtable));
     ck_assert(check_word(int_as_char, hashtable));
+	ck_assert(!check_word(overflow_char, hashtable));
 }
 END_TEST
 

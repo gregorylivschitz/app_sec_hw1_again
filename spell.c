@@ -26,7 +26,7 @@ int check_words(FILE* fp, hashmap_t hashtable[], char* misspelled[])
 	line_size = getline(&line_buf, &line_buf_size, fp);
 	while (line_size >= 0 && misspell_count < MAX_MISSPELLED)
 	{
-		line_buf[strcspn(line_buf, "\n")] = 0;
+		line_buf[strcspn(line_buf, "\r\n")] = 0;
 		char * pch;
 		char * str_delim = " ";
 		pch = strtok(line_buf, str_delim);
@@ -36,8 +36,9 @@ int check_words(FILE* fp, hashmap_t hashtable[], char* misspelled[])
 			if (strlen(stripped_word) > 0){
 				bool is_word_spelled = check_word(stripped_word, hashtable);
 				if (!(is_word_spelled)){
-					char* new_word = malloc(LENGTH);
+					char* new_word = malloc(LENGTH + 1);
 					strncpy(new_word, stripped_word, LENGTH);
+					new_word[LENGTH] = '\0';
 					misspelled[misspell_count] = new_word;
 					misspell_count++;
 				}
@@ -104,7 +105,7 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]){
 	ssize_t line_size;
 	line_size = getline(&line_buf, &line_buf_size, fp);
 	while(line_size >= 0){
-		line_buf[strcspn(line_buf, "\n")] = 0;
+		line_buf[strcspn(line_buf, "\r\n")] = 0;
 		int hash_code = hash_function(line_buf);
 		if (hashtable[hash_code] != NULL){
 			insert_node_at_end(line_buf, hashtable[hash_code]);
