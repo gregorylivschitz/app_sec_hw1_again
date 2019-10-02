@@ -55,10 +55,18 @@ START_TEST(test_check_words_normal)
     ck_assert_msg(strcmp(misspelled[0], expected[0]) == 0);
     ck_assert_msg(strcmp(misspelled[1], expected[1]) == 0);
     ck_assert_msg(strcmp(misspelled[2], expected[2]) == 0);
-//	char *misspelled2[MAX_MISSPELLED];
-//	FILE *fp2 = fopen("test_no_misspelled_words.txt", "r");
-//	int num_misspelled2 = check_words(fp2, hashtable, misspelled2);
-//	ck_assert(num_misspelled2 == 0);
+	hashmap_t hashtable2[HASH_SIZE];
+	load_dictionary(DICTIONARY, hashtable2);
+	char *misspelled2[MAX_MISSPELLED];
+	FILE *fp2 = fopen("test_no_misspelled_words.txt", "r");
+	int num_misspelled2 = check_words(fp2, hashtable2, misspelled2);
+	ck_assert(num_misspelled2 == 0);
+	hashmap_t hashtable3[HASH_SIZE];
+	load_dictionary(DICTIONARY, hashtable3);
+	char *misspelled3[MAX_MISSPELLED];
+	FILE *fp3 = fopen("test_full_punc.txt", "r");
+	int num_misspelled3 = check_words(fp3, hashtable3, misspelled3);
+	ck_assert(num_misspelled2 == 0);
 }
 END_TEST
 
