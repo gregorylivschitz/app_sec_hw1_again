@@ -66,7 +66,19 @@ START_TEST(test_check_words_normal)
 	char *misspelled3[MAX_MISSPELLED];
 	FILE *fp3 = fopen("test_full_punc.txt", "r");
 	int num_misspelled3 = check_words(fp3, hashtable3, misspelled3);
-	ck_assert(num_misspelled2 == 0);
+	ck_assert(num_misspelled3 == 0);
+}
+END_TEST
+
+START_TEST(test_afl_input_overflow_lower_hashcode)
+{
+	//This test overflows overflows the hashcode making it negative
+	hashmap_t hashtable_afl[HASH_SIZE];
+	load_dictionary(DICTIONARY, hashtable_afl);
+	char *misspelled_afl[MAX_MISSPELLED];
+	FILE *fp_afl = fopen("afl_crashes/crash_2.txt", "r");
+	int num_misspelled_afl = check_words(fp_afl, hashtable_afl, misspelled_afl);
+	ck_assert(num_misspelled_afl == 1);
 }
 END_TEST
 
@@ -80,8 +92,8 @@ check_word_suite(void)
     tcase_add_test(check_word_case, test_dictionary_normal);
     tcase_add_test(check_word_case, test_check_word_normal);
     tcase_add_test(check_word_case, test_check_words_normal);
+	tcase_add_test(check_word_case, test_afl_input_overflow_lower_hashcode);
     suite_add_tcase(suite, check_word_case);
-
     return suite;
 }
 
