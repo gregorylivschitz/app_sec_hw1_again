@@ -33,7 +33,6 @@ START_TEST(test_check_word_normal)
     ck_assert(!check_word(punctuation_word_2, hashtable));
     ck_assert(!check_word(quoted_word, hashtable));
     ck_assert(check_word(int_as_char, hashtable));
-    // Test here: What if a word begins and ends with "?
 }
 END_TEST
 
@@ -56,6 +55,10 @@ START_TEST(test_check_words_normal)
     ck_assert_msg(strcmp(misspelled[0], expected[0]) == 0);
     ck_assert_msg(strcmp(misspelled[1], expected[1]) == 0);
     ck_assert_msg(strcmp(misspelled[2], expected[2]) == 0);
+//	char *misspelled2[MAX_MISSPELLED];
+//	FILE *fp2 = fopen("test_no_misspelled_words.txt", "r");
+//	int num_misspelled2 = check_words(fp2, hashtable, misspelled2);
+//	ck_assert(num_misspelled2 == 0);
 }
 END_TEST
 

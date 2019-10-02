@@ -11,6 +11,7 @@ void insert_node_at_end(char * word, hashmap_t head);
 void str_custom(char * temp);
 void deallocate_hashtable(hashmap_t hashtable[]);
 
+
 int check_words(FILE* fp, hashmap_t hashtable[], char* misspelled[])
 {
 	if (hashtable == NULL){
@@ -29,15 +30,14 @@ int check_words(FILE* fp, hashmap_t hashtable[], char* misspelled[])
 		char * pch;
 		char * str_delim = " ";
 		pch = strtok(line_buf, str_delim);
-		while (pch != NULL && misspell_count < MAX_MISSPELLED)
+		while (pch != NULL && (strlen(pch) > 0) && misspell_count < MAX_MISSPELLED)
 		{
-			pch = strip_punc(pch);
-			if (strlen(pch) > 0){
-				bool is_word_spelled = check_word(pch, hashtable);
+			char * stripped_word = strip_punc(pch);
+			if (strlen(stripped_word) > 0){
+				bool is_word_spelled = check_word(stripped_word, hashtable);
 				if (!(is_word_spelled)){
-//					char new_word[LENGTH];
 					char* new_word = malloc(LENGTH);
-					strncpy(new_word, pch, LENGTH);
+					strncpy(new_word, stripped_word, LENGTH);
 					misspelled[misspell_count] = new_word;
 					misspell_count++;
 				}
@@ -48,16 +48,10 @@ int check_words(FILE* fp, hashmap_t hashtable[], char* misspelled[])
 		line_count++;
 		line_size = getline(&line_buf, &line_buf_size, fp);
 	}
+	deallocate_hashtable(hashtable);
 	free(line_buf);
 	line_buf = NULL;
 	fclose(fp);
-	deallocate_hashtable(hashtable);
-//	printf("misspelled %d\n", count);
-//	for(int i=0; i<misspell_count; i++){
-//		printf("%d. %s\n", i, misspelled[i]);
-//	}
-//	printf("misspelled count is %d\n", misspell_count);
-//	print_char_array(misspelled, misspell_count);
 	return misspell_count;
 }
 
@@ -81,13 +75,16 @@ bool check_word(const char* word, hashmap_t hashtable[]){
 		strncpy(lower_word, word, LENGTH);
 		str_custom(lower_word);
 		int hash_code_lower = hash_function(lower_word);
-		hashmap_t word_node_ptr_lower = hashtable[hash_code_lower];
-		while (word_node_ptr_lower != NULL) {
-			if (strncmp(word_node_ptr_lower->word, lower_word, LENGTH) == 0) {
-				return true;
+		if (hash_code_lower > 0 ){
+			hashmap_t word_node_ptr_lower = hashtable[hash_code_lower];
+			while (word_node_ptr_lower != NULL) {
+				if (strncmp(word_node_ptr_lower->word, lower_word, LENGTH) == 0) {
+					return true;
+				}
+				word_node_ptr_lower = word_node_ptr_lower->next;
 			}
-			word_node_ptr_lower = word_node_ptr_lower->next;
 		}
+
 	}
 
 	return false;
@@ -112,7 +109,7 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]){
 		if (hashtable[hash_code] != NULL){
 			insert_node_at_end(line_buf, hashtable[hash_code]);
 		}else{
-			hashmap_t new_node = calloc(1, sizeof(node));
+			hashmap_t new_node = malloc(sizeof(node));
 			strncpy(new_node->word, line_buf, LENGTH);
 			new_node->next = NULL;
 			hashtable[hash_code] = new_node;
@@ -141,36 +138,11 @@ void insert_node_at_end(char * word, hashmap_t head)
 		}
 		temp = temp->next;
 	}
-	hashmap_t new_node = calloc(1, sizeof(node));
+	hashmap_t new_node = malloc(sizeof(node));
 	strncpy(new_node->word, word, LENGTH);
 	new_node->next = NULL;
 	temp->next = new_node;
 }
-
-
-
-
-//void print_hashtable(hashmap_t hashtable[]){
-//	printf("starting printing hashtable\n");
-//	for(int i=0; i<HASH_SIZE; i++){
-//		hashmap_t blah = hashtable[i];
-//		while(blah != NULL){
-//			printf("the hashcode is %d\n", i);
-//			printf("the word is %s, next %p\n", blah->word, blah->next);
-//			blah = blah->next;
-//		}
-//	}
-//}
-
-//void print_hashtable_one_link(hashmap_t hashtable[], int hash){
-//	hashmap_t blah = hashtable[hash];
-//	printf("link list %p, hash %d", blah, hash);
-//	while(blah != NULL) {
-//		printf("the hashcode is %d\n", hash);
-//		printf("the word is %s, next %p\n", blah->word, blah->next);
-//		blah = blah->next;
-//	}
-//}
 
 
 void str_custom(char * temp) {
@@ -205,19 +177,22 @@ bool is_number(const char* word){
 	return true;
 }
 
-
 char * strip_punc(char * pch){
+
 	char *s = pch + strlen(pch) - 1;
-	while (ispunct(*s)) {
+	while (ispunct(*s) && s >= pch) {
+
 		*s = '\0';
 		s--;
 	}
-
-	s = pch;
-	while (ispunct(*s)) {
-		*s = '\0';
-		s++;
+	if (s > pch) {
+		s = pch;
+		bool strip_punc = ispunct(*s);
+		while (strip_punc && *s != '\0') {
+			//*s = '\0';
+			s++;
+			strip_punc = ispunct(*s);
+		}
 	}
-
 	return s;
 }
